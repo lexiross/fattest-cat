@@ -1,4 +1,4 @@
-![demo](https://raw.githubusercontent.com/lexiross/fattest-cat/master/demo.gif)
+![demo](https://raw.githubusercontent.com/lexiross/fattest-cat/master/usage.gif)
 
 ## Usage
 `./findFattestCat.sh`
