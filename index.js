@@ -1,14 +1,23 @@
+const Promise = require("bluebird");
 const request = require("request-promise");
-const exec = require("child_process").execSync;
+const cheerio = require("cheerio");
+const exec    = require("child_process").execSync;
 
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
-const CAT_URL_REGEX = /adoptions\/pet-details\/\d+/g;
+const CAT_URL_REGEX = /adoptions\/pet-details\/\d+/;
+
 
 console.log("Accessing San Francisco SPCA (Cat Department)...");
-request.get(ADOPTION_PAGE)
-  .then((adoptionsPage) => {
-    console.log("Cat information system accessed. Beginning weighing process...");
+// Assume no more than 3 pages of cats
+Promise.map([ADOPTION_PAGE, `${ADOPTION_PAGE}?page=1`, `${ADOPTION_PAGE}?page=2`], request.get)
+  .tap(() => console.log("Cat information system accessed. Beginning weighing process..."))
+  .map((adoptionsPage) => {
+    cheerio(adoptionsPage)
+      .find("a")
+      .filter((i, tag) => tag.href.match(/adoptions\/pet-details\/\d+/))
+      .map((i, tag) => tag.href);
+
     const urls = [];
     let match;
     while (match = CAT_URL_REGEX.exec(adoptionsPage)) {
