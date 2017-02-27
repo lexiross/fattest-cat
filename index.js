@@ -24,7 +24,7 @@ request.get(ADOPTION_PAGE)
       .then((catPage) => {
         const name = /\<h1\>([a-zA-Z]+)\<\/h1\>/.exec(catPage)[1];
         const lbs = Number(/(\d+)lbs\./.exec(catPage)[1]);
-        const oz = Number(/(\d+)oz./.exec(catPage)[1]);
+        const oz = Number(/(\d+)oz\./.exec(catPage)[1]);
         const isFemale = /Female/.test(catPage);
 
         console.log("Weighing cat:", name);
