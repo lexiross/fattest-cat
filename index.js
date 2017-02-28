@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const request = require("request-promise");
 const exec = require("child_process").execSync;
 
