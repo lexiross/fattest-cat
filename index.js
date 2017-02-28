@@ -1,4 +1,5 @@
 const Promise = require("bluebird");
+const {flatten} = require("lodash");
 const request = require("request-promise");
 const cheerio = require("cheerio");
 const exec    = require("child_process").execSync;
@@ -13,35 +14,36 @@ console.log("Accessing San Francisco SPCA (Cat Department)...");
 Promise.map([ADOPTION_PAGE, `${ADOPTION_PAGE}?page=1`, `${ADOPTION_PAGE}?page=2`], request.get)
   .tap(() => console.log("Cat information system accessed. Beginning weighing process..."))
   .map((adoptionsPage) => {
-    cheerio(adoptionsPage)
+    const urls = cheerio(adoptionsPage)
       .find("a")
-      .filter((i, tag) => tag.href.match(/adoptions\/pet-details\/\d+/))
-      .map((i, tag) => tag.href);
+      .filter((i, tag) => tag.attribs.href && tag.attribs.href.match(/adoptions\/pet-details\/\d+/))
+      .map((i, tag) => `${SFSPCA_BASE}/${tag.attribs.href}`)
+      .toArray();
 
-    const urls = [];
-    let match;
-    while (match = CAT_URL_REGEX.exec(adoptionsPage)) {
-      urls.push(`${SFSPCA_BASE}/${match[0]}`);
-    }
     // Remove any duplicates
     return urls.filter((url, i) => urls.indexOf(url) === i);
   })
-  .map((url) => {
-    return request.get(url)
-      // SPCA sometimes returns 403s for some cats, ignore this.
-      .catch((err) => err)
-      .then((catPage) => {
-        const name = /\<h1\>([a-zA-Z]+)\<\/h1\>/.exec(catPage)[1];
-        const lbs = Number(/(\d+)lbs\./.exec(catPage)[1]);
-        const oz = Number(/(\d+)oz\./.exec(catPage)[1]);
-        const isFemale = /Female/.test(catPage);
+  .map((urls) => {
+    const fetches = urls.map((url) => {
+        return request.get(url)
+          // SPCA sometimes returns 403s for some cats, ignore this.
+          .catch((err) => err)
+          .then((catPage) => {
+            const name = /\<h1\>([a-zA-Z]+)\<\/h1\>/.exec(catPage)[1];
+            const lbs = Number(/(\d+)lbs\./.exec(catPage)[1]);
+            const oz = Number(/(\d+)oz\./.exec(catPage)[1]);
+            const isFemale = /Female/.test(catPage);
 
-        console.log("Weighing cat:", name);
-        return {name, lbs, oz, isFemale, url}
-      })
-      // Null for cats that cannot be parsed.
-      .catch(() => null);
+            console.log("Weighing cat:", name);
+            return {name, lbs, oz, isFemale, url}
+          })
+          // Null for cats that cannot be parsed.
+          .catch(() => null);
+    });
+    return Promise.all(fetches);
   })
+  // flat cats before fat cats
+  .then(flatten)
   // Filter out unparsable cats.
   .filter(Boolean)
   .then((cats) => {
