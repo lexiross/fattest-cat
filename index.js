@@ -1,5 +1,7 @@
-const opener = require("opener");
+#!/usr/bin/env node
+
 const request = require("request-promise");
+const opener = require("opener");
 
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
