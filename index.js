@@ -1,5 +1,5 @@
+const opener = require("opener");
 const request = require("request-promise");
-const exec = require("child_process").execSync;
 
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
@@ -44,5 +44,5 @@ request.get(ADOPTION_PAGE)
     });
     console.log(`The fattest cat is ${fattestCat.name}. ${(fattestCat.isFemale ? "She" : "He")} weighs ${fattestCat.lbs} lbs and ${fattestCat.oz} oz.`);
     setTimeout(() => console.log("Opening cat profile..."), 2000);
-    setTimeout(() => exec(`open ${fattestCat.url}`), 4000);
+    setTimeout(() => opener(fattestCat.url), 4000);
   });
