@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "opener": "^1.4.3",
     "request": "^2.79.0",
     "request-promise": "^4.1.1"
   },
