@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repository": "lexiross/fattest-cat",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
