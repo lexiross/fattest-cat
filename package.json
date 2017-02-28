@@ -4,6 +4,7 @@
   "description": "Find fattest cat currently up for adoption at SF SPCA.",
   "bin": "index.js",
   "main": "index.js",
+  "repository": "lexiross/fattest-cat",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
