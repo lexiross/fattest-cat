@@ -3,42 +3,55 @@ const request = require("request-promise");
 const cheerio = require("cheerio");
 const exec    = require("child_process").execSync;
 
-const {flatten, uniq, compact} = require("lodash");
+const {uniq, compact} = require("lodash");
 
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
 
+const fetchCatsHelper = Promise.method((pageNumber, catsSoFar) => {
+  const url = pageNumber === 0 ? ADOPTION_PAGE : `${ADOPTION_PAGE}?page=${pageNumber}`
+  return request.get(url)
+    .then((adoptionsPage) => {
+      const cats = cheerio(adoptionsPage)
+        .find("a")
+        .filter((i, tag) => tag.attribs.href && tag.attribs.href.match(/adoptions\/pet-details\/\d+/))
+        .map((i, tag) => `${SFSPCA_BASE}${tag.attribs.href}`)
+        .toArray();
+      if (!cats || cats.length === 0) {
+        return catsSoFar;
+      } else {
+        return fetchCatsHelper(pageNumber + 1, catsSoFar.concat(cats));
+      }
+    })
+    .catch((err) => {
+      console.log("Error fetching cats:", err);
+      return catsSoFar;
+    });
+});
+const fetchCats = () => fetchCatsHelper(0, []);
+
 console.log("Accessing San Francisco SPCA (Cat Department)...");
 
-// Assume no more than 3 pages of cats
-Promise.map([ADOPTION_PAGE, `${ADOPTION_PAGE}?page=1`, `${ADOPTION_PAGE}?page=2`], request.get)
-  .tap(() => console.log("Cat information system accessed. Beginning weighing process..."))
-  .map((adoptionsPage) => {
-    return cheerio(adoptionsPage)
-      .find("a")
-      .filter((i, tag) => tag.attribs.href && tag.attribs.href.match(/adoptions\/pet-details\/\d+/))
-      .map((i, tag) => `${SFSPCA_BASE}/${tag.attribs.href}`)
-      .toArray();
-  })
-  // Flat cats before fat cats
-  .then(flatten)
-  // NO DOUBLE CATS
-  .then(uniq)
+fetchCats()
+  .then(uniq) // NO DOUBLE CATS
+  .tap((cats) => console.log(`Cat information system accessed. ${cats.length} cats found. Beginning weighing process...`))
   .map((url) => {
     return request.get(url)
       // SPCA sometimes returns 403s for some cats, ignore this.
       .catch((err) => err)
       .then((catPage) => {
-        const name = /\<h1\>([a-zA-Z]+)\<\/h1\>/.exec(catPage)[1];
-        const lbs = Number(/(\d+)lbs\./.exec(catPage)[1]);
-        const oz = Number(/(\d+)oz\./.exec(catPage)[1]);
-        const isFemale = /Female/.test(catPage);
+        const $ = cheerio.load(catPage);
+        const name = $(".field-name-title h1").text();
+        const weight = $(".field-name-field-animal-weight .field-item").text();
+        const lbs = Number(/(\d+)lbs\./.exec(weight)[1]);
+        const oz = /(\d+)oz\./.test(weight) ? Number(/(\d+)oz\./.exec(weight)[1]) : 0;
+        const isFemale = $(".field-name-field-gender .field-item").text().trim() === "Female";
 
         console.log("Weighing cat:", name);
         return {name, lbs, oz, isFemale, url}
       })
       // Null for cats that cannot be parsed.
-      .catch(() => null);
+      .catch(() => {});
   })
   // Filter out unparsable cats.
   .then(compact)
