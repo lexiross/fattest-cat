@@ -12,6 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "opener": "^1.4.3",
+    "bluebird": "^3.4.7",
+    "cheerio": "^0.22.0",
+    "lodash": "^4.17.4",
     "request": "^2.79.0",
     "request-promise": "^4.1.1"
   },
