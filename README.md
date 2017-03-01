@@ -1,6 +1,6 @@
 ![demo](https://raw.githubusercontent.com/lexiross/fattest-cat/master/usage.gif)
 
-It does what it says in the tin. It is very important to find the cuddliest one.
+Some cats are born fat, some achieve fatness, others have fatness thrust upon them. You can find all of them at the San Francisco SPCA using this tool.
 
 ## Install
 
