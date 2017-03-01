@@ -1,6 +1,6 @@
 {
   "name": "fattest-cat",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Find fattest cat currently up for adoption at SF SPCA.",
   "bin": "index.js",
   "main": "index.js",
@@ -8,7 +8,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Lexi Ross",
+  "keywords": [
+    "cat",
+    "cats",
+    "spca",
+    "fat",
+    "fatter",
+    "fattest",
+    "meow"
+  ],
   "license": "ISC",
   "dependencies": {
     "opener": "^1.4.3",
