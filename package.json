@@ -2,10 +2,13 @@
   "name": "fattest-cat",
   "version": "1.0.3",
   "description": "Find fattest cat currently up for adoption at SF SPCA.",
-  "bin": "index.js",
-  "main": "index.js",
+  "bin": {
+    "fattest-cat": "lib/index.js"
+  },
+  "main": "lib/index.js",
   "repository": "lexiross/fattest-cat",
   "scripts": {
+    "prepublish": "node_modules/babel-cli/bin/babel.js index.js --out-dir lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lexi Ross",
@@ -20,14 +23,18 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "opener": "^1.4.3",
     "bluebird": "^3.4.7",
     "cheerio": "^0.22.0",
+    "colors": "^1.1.2",
     "lodash": "^4.17.4",
+    "opener": "^1.4.3",
     "request": "^2.79.0",
     "request-promise": "^4.1.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-preset-es2015": "^6.22.0",
     "eslint": "^3.16.1",
     "eslint-config-classdojo": "^1.2.4"
   }
