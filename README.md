@@ -4,6 +4,8 @@ Some cats are born fat, some achieve fatness, others have fatness thrust upon th
 
 ## Install
 
+Compatible with node 6+
+
 `npm install -g fattest-cat`
 
 ## Usage
