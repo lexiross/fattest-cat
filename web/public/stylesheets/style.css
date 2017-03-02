@@ -1,0 +1,10 @@
+body {
+  background: #333;
+  color: white;
+  padding: 50px;
+  font: 16px "Consolas", "Monaco", monospace
+}
+
+#app {
+  font-weight: bold;
+}
