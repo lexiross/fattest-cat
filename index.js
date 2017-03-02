@@ -5,6 +5,7 @@ const opener          = require("opener");
 const Promise         = require("bluebird");
 const cheerio         = require("cheerio");
 const {uniq, compact} = require("lodash");
+const colors          = require("colors");
 
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
@@ -63,7 +64,7 @@ fetchCats()
         fattestCat = cat;
       }
     });
-    console.log(`The fattest cat is ${fattestCat.name}. ${(fattestCat.isFemale ? "She" : "He")} weighs ${fattestCat.lbs} lbs and ${fattestCat.oz} oz.`);
+    console.log(`The fattest cat is ${fattestCat.name}. ${(fattestCat.isFemale ? "She" : "He")} weighs ${fattestCat.lbs} lbs and ${fattestCat.oz} oz.`.yellow);
     setTimeout(() => console.log("Opening cat profile..."), 2000);
     setTimeout(() => opener(fattestCat.url), 4000);
   });
