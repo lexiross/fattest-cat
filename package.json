@@ -9,7 +9,7 @@
   },
   "repository": "lexiross/fattest-cat",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./web/app.js"
   },
   "author": "Lexi Ross",
   "keywords": [
