@@ -5,6 +5,7 @@ const opener          = require("opener");
 const Promise         = require("bluebird");
 const cheerio         = require("cheerio");
 const {uniq, compact} = require("lodash");
+const colors          = require("colors");
 
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
@@ -33,6 +34,10 @@ const fetchCats = () => fetchCatsHelper(0, []);
 
 console.log("Accessing San Francisco SPCA (Cat Department)...");
 
+colors.setTheme({
+  output: ["yellow", "bold"],
+});
+
 fetchCats()
   .then(uniq) // NO DOUBLE CATS
   .tap((cats) => console.log(`Cat information system accessed. ${cats.length} cats found. Beginning weighing process...`))
@@ -48,7 +53,7 @@ fetchCats()
         const oz = /(\d+)oz\./.test(weight) ? Number(/(\d+)oz\./.exec(weight)[1]) : 0;
         const isFemale = $(".field-name-field-gender .field-item").text().trim() === "Female";
 
-        console.log("Weighing cat:", name);
+        console.log("Weighing cat: %s", colors.green(name));
         return {name, lbs, oz, isFemale, url}
       })
       // Null for cats that cannot be parsed.
@@ -63,7 +68,7 @@ fetchCats()
         fattestCat = cat;
       }
     });
-    console.log(`The fattest cat is ${fattestCat.name}. ${(fattestCat.isFemale ? "She" : "He")} weighs ${fattestCat.lbs} lbs and ${fattestCat.oz} oz.`);
+    console.log(`The fattest cat is ${colors.green.underline(fattestCat.name)}. ${(fattestCat.isFemale ? "She" : "He")} weighs ${fattestCat.lbs} lbs and ${fattestCat.oz} oz.`.output);
     setTimeout(() => console.log("Opening cat profile..."), 2000);
     setTimeout(() => opener(fattestCat.url), 4000);
   });
