@@ -9,7 +9,7 @@
   },
   "repository": "lexiross/fattest-cat",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "precommit": "eslint index.js"
   },
   "author": "Lexi Ross",
   "keywords": [
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "eslint": "^3.16.1",
-    "eslint-config-classdojo": "^1.2.4"
+    "eslint-config-classdojo": "^1.2.4",
+    "husky": "^0.13.2"
   }
 }
