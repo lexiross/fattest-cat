@@ -73,6 +73,9 @@ fetchCats()
         fattestCats.push(cat);
       }
     });
+    
+    // Only display up to 10 fattest cats
+    fattestCats = fattestCats.slice(0, 10);
 
     //Decide whether to display a single cat or multiple
     let winnerDesc;
