@@ -10,4 +10,8 @@ Compatible with node 6+
 
 ## Usage
 
-`$ fattest-cat` or `$ fattest-cat --metric` for metric units.
+##### Standard
+`$ fattest-cat`
+
+##### Metric units
+`$ fattest-cat --metric`
