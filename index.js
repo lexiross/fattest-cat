@@ -62,13 +62,39 @@ fetchCats()
   // Filter out unparsable cats.
   .then(compact)
   .then((cats) => {
-    let fattestCat = {lbs: 0, oz: 0};
+    let fattestCats = [{lbs: 0, oz: 0}];
     cats.forEach((cat) => {
-      if (cat.lbs > fattestCat.lbs || (cat.lbs === fattestCat.lbs && cat.oz > fattestCat.oz)) {
-        fattestCat = cat;
+      //Cat is bigger than the biggest cats
+      if (cat.lbs > fattestCats[0].lbs || (cat.lbs === fattestCats[0].lbs && cat.oz > fattestCats[0].oz)) {
+        fattestCats = [cat];
+      }
+      //Cat ties with the current biggest cats
+      else if(cat.lbs === fattestCats[0].lbs && cat.oz === fattestCats[0].oz){
+        fattestCats.push(cat);
       }
     });
-    console.log(`The fattest cat is ${colors.green.underline(fattestCat.name)}. ${(fattestCat.isFemale ? "She" : "He")} weighs ${fattestCat.lbs} lbs and ${fattestCat.oz} oz.`.output);
+    
+    // Only display up to 10 fattest cats
+    fattestCats = fattestCats.slice(0, 10);
+
+    //Decide whether to display a single cat or multiple
+    let winnerDesc;
+    if(fattestCats.length === 1){
+      winnerDesc = `cat is ${colors.green.underline(fattestCats[0].name)}. ${(fattestCats[0].isFemale ? "She" : "He")} weighs`.output;
+    }
+    else{
+      winnerDesc = `cats ${fattestCats.map(function (cat) {
+          return colors.green.underline(cat.name);
+      }).join(', ')} each weigh`.output;
+
+      let pos = winnerDesc.lastIndexOf(',');
+      winnerDesc = winnerDesc.substring(0, pos) + ' and' + winnerDesc.substring(pos+1);
+    }
+    console.log(`The fattest ${winnerDesc} ${fattestCats[0].lbs} lbs and ${fattestCats[0].oz} oz.`.output);
     setTimeout(() => console.log("Opening cat profile..."), 2000);
-    setTimeout(() => opener(fattestCat.url), 4000);
+    setTimeout(() => {
+        for(let fattestCat of fattestCats){
+            opener(fattestCat.url);
+        }
+    }, 4000);
   });
