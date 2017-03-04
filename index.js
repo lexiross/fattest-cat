@@ -9,7 +9,8 @@ const cheerio = require("cheerio");
 require("colors");
 
 
-
+const METRIC = process.argv.includes("--metric");
+const GRAMS_PER_OZ = 28.3495;
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
 
@@ -73,9 +74,11 @@ fetchCatsHelper(0, [])
     const introText = (tie ? "The fattest cats are" : "The fattest cat is").yellow.bold;
     const nameText = (tie ? `${names.slice(0, -1).join(", ")} and ${_.last(names)}` : names[0]).green.underline.bold;
     const descriptionText = (tie ? "They each weigh" : (fattestCats[0].isFemale ? "She weighs" : "He weighs")).yellow.bold;
-    const weightText = (`${fattestCats[0].lbs} lbs and ${fattestCats[0].oz} oz.`).yellow.bold;
+    const weightText = METRIC ?
+      (`${Math.round(GRAMS_PER_OZ * highestWeight)} grams`).yellow.bold :
+      (`${fattestCats[0].lbs} lbs and ${fattestCats[0].oz} oz.`).yellow.bold;
     const openText = (tie ? "Opening cat profiles..." : "Opening cat profile...").yellow.bold;
 
-    console.log(`${introText} ${nameText}. ${descriptionText} ${weightText} ${openText}`);
+    console.log(`${introText} ${nameText}. ${descriptionText} ${weightText}. ${openText}`);
     setTimeout(() => _(fattestCats).map("url").each(opener), 3000);
   });
