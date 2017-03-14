@@ -80,5 +80,5 @@ fetchCatsHelper(0, [])
     const openText = (tie ? "Opening cat profiles..." : "Opening cat profile...").yellow.bold;
 
     console.log(`${introText} ${nameText}. ${descriptionText} ${weightText}. ${openText}`);
-    setTimeout(() => _(fattestCats).map("url").each(opener), 3000);
+    setTimeout(() => _(fattestCats).map("url").each((url) => opener(url)), 3000);
   });
