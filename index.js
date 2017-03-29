@@ -8,11 +8,23 @@ const cheerio = require("cheerio");
 
 require("colors");
 
-
+const HELP = (process.argv.includes("-h") || process.argv.includes("--help"));
 const METRIC = process.argv.includes("--metric");
 const GRAMS_PER_OZ = 28.3495;
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
+
+if(HELP){
+  console.log("Some cats are born fat, some achieve fatness, others have fatness thrust");
+  console.log("upon them. You can find all of them at the San Francisco SPCA using this");
+  console.log("tool...");
+  console.log("");
+  console.log("Standard Usage:");
+  console.log("$ fattest-cat");
+  console.log("Metric Units:");
+  console.log("$ fattest-cat --metric");
+  return;
+}
 
 const fetchCatsHelper = Promise.method((pageNumber, catsSoFar) => {
   const url = pageNumber === 0 ? ADOPTION_PAGE : `${ADOPTION_PAGE}?page=${pageNumber}`
