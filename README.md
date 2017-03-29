@@ -15,3 +15,6 @@ Compatible with node 6+
 
 ##### Metric units
 `$ fattest-cat --metric`
+
+##### Garfield Mode
+`$ fattest-cat --garfield`

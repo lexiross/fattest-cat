@@ -8,11 +8,18 @@ const cheerio = require("cheerio");
 
 require("colors");
 
-
+const GARFIELD = (process.argv.includes("--garfield") || process.argv.includes("--garfield-mode"));
 const METRIC = process.argv.includes("--metric");
 const GRAMS_PER_OZ = 28.3495;
 const SFSPCA_BASE = "https://www.sfspca.org"
 const ADOPTION_PAGE = `${SFSPCA_BASE}/adoptions/cats`;
+
+if(GARFIELD){
+  if(new Date().getDay() == 1){
+    console.log("I hate Mondays");
+    return;
+  }
+}
 
 const fetchCatsHelper = Promise.method((pageNumber, catsSoFar) => {
   const url = pageNumber === 0 ? ADOPTION_PAGE : `${ADOPTION_PAGE}?page=${pageNumber}`
