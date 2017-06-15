@@ -1,0 +1,6 @@
+{
+  "name": "Fattest Cat",
+  "description": "A server that redirects to the SPCA page for the fattest cat",
+  "repository": "https://github.com/lexiross/fattest-cat",
+  "keywords": ["cats", "fat", "fatter", "fattest"]
+}

@@ -2,14 +2,15 @@
   "name": "fattest-cat",
   "version": "1.0.10",
   "description": "Find fattest cat currently up for adoption at SF SPCA.",
-  "bin": "index.js",
-  "main": "index.js",
+  "bin": "print_fattest_cat.js",
+  "main": "server.js",
   "engines": {
     "node": ">=6.0.0"
   },
   "repository": "lexiross/fattest-cat",
   "scripts": {
-    "precommit": "eslint index.js"
+    "precommit": "eslint index.js",
+    "start": "node server.js"
   },
   "author": "Lexi Ross",
   "keywords": [
@@ -26,6 +27,7 @@
     "bluebird": "^3.4.7",
     "cheerio": "^0.22.0",
     "colors": "^1.1.2",
+    "express": "^4.15.3",
     "lodash": "^4.17.4",
     "opener": "^1.4.3",
     "request": "^2.79.0",
