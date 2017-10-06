@@ -29,6 +29,7 @@
     "colors": "^1.1.2",
     "express": "^4.15.3",
     "lodash": "^4.17.4",
+    "number-to-words": "^1.2.3",
     "opener": "^1.4.3",
     "request": "^2.79.0",
     "request-promise": "^4.1.1"
