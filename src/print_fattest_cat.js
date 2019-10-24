@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const _ = require('lodash');
 const opener = require('opener');
 const { fetchCatItems, fetchCatDetails } = require('./fetch_cats');
 require('colors');
@@ -12,7 +11,7 @@ const GRAMS_PER_OZ = 28.3495;
 
 if (GARFIELD) {
   if (new Date().getDay() == 1) {
-    console.log('I hate Mondays');
+    console.log('I hate Mondays.');
     return;
   }
 }
@@ -38,38 +37,28 @@ async function main() {
     }
   }
 
-  const highestWeight = _(cats)
-    .map('weight')
-    .max();
-  const fattestCats = _.filter(cats, { weight: highestWeight });
-  const names = _.map(fattestCats, 'name');
+  const highestWeight = Math.max(...cats.map((c) => c.weight));
+  const fattestCats = cats.filter((c) => c.weight === highestWeight);
+  const names = fattestCats.map((c) => c.name);
   const tie = fattestCats.length > 1;
 
-  const introText = (tie ? 'The fattest cats are' : 'The fattest cat is').yellow.bold;
+  const introText = `The fattest ${tie ? 'cats are' : 'cat is'}`.yellow.bold;
   const nameText = (tie
-    ? `${names.slice(0, -1).join(', ')} and ${_.last(names)}`
+    ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
     : names[0]
   ).green.underline.bold;
-  const descriptionText = (tie
-    ? 'They each weigh'
-    : fattestCats[0].isFemale
-    ? 'She weighs'
-    : 'He weighs'
-  ).yellow.bold;
+  const descriptionText = (tie ? 'They each weigh' : 'They weigh').yellow.bold;
   const weightText = METRIC
     ? `${Math.round(GRAMS_PER_OZ * highestWeight)} grams`.yellow.bold
     : `${fattestCats[0].lbs} lbs and ${fattestCats[0].oz} oz.`.yellow.bold;
-  const openText = (tie ? 'Opening cat profiles...' : 'Opening cat profile...').yellow
-    .bold;
+  const openText = `Opening cat ${tie ? 'profiles' : 'profile'}...`.yellow.bold;
 
   console.log(`${introText} ${nameText}. ${descriptionText} ${weightText}. ${openText}`);
-  setTimeout(
-    () =>
-      _(fattestCats)
-        .map('url')
-        .each((url) => opener(url)),
-    3000,
-  );
+  setTimeout(() => {
+    for (const cat of fattestCats) {
+      opener(cat.url);
+    }
+  }, 3000);
 }
 
 main();

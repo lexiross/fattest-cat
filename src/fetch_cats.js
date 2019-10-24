@@ -3,19 +3,12 @@ const request = require('request-promise');
 const LIST_URL =
   'https://www.sfspca.org/wp-json/sfspca/v1/filtered-posts/get-adoptions?per_page=100';
 
-async function fetchJSON(url) {
-  const responseText = await request.get(url);
-  return JSON.parse(responseText);
-}
-
 exports.fetchCatItems = async function fetchCatItems() {
-  const response = await fetchJSON(LIST_URL);
+  const responseText = await request.get(LIST_URL);
+  const response = JSON.parse(responseText);
   return response.items
     .filter((item) => item.tags.species == 'Cat')
-    .map((item) => ({
-      name: item.title,
-      url: item.permalink,
-    }));
+    .map((item) => ({ name: item.title, url: item.permalink }));
 };
 
 exports.fetchCatDetails = async function fetchCatDetails({ name, url }) {
