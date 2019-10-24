@@ -1,6 +1,6 @@
 {
   "name": "fattest-cat",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "Find fattest cat currently up for adoption at SF SPCA.",
   "bin": "src/print_fattest_cat.js",
   "main": "server.js",
