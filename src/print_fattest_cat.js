@@ -49,7 +49,7 @@ async function main() {
   ).green.underline.bold;
   const descriptionText = (tie ? 'They each weigh' : 'They weigh').yellow.bold;
   const weightText = METRIC
-    ? `${Math.round(GRAMS_PER_OZ * highestWeight)} grams`.yellow.bold
+    ? metricWeightForHumans(highestWeight).yellow.bold
     : `${fattestCats[0].lbs} lbs and ${fattestCats[0].oz} oz.`.yellow.bold;
   const openText = `Opening cat ${tie ? 'profiles' : 'profile'}...`.yellow.bold;
 
@@ -62,3 +62,11 @@ async function main() {
 }
 
 main();
+
+function metricWeightForHumans(ounces) {
+  const grams = GRAMS_PER_OZ * ounces;
+  const kilos = grams / 1000;
+  return kilos >= 1
+    ? `${kilos.toLocaleString('en-US', { maximumFractionDigits: 1 })} kg`
+    : `${grams} g`;
+}
