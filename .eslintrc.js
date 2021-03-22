@@ -1,6 +1,22 @@
 module.exports = {
-  extends: "classdojo/node",
+  parserOptions: {
+    ecmaVersion: 2017
+  },
+  env: {
+    "es6": true,
+    "node": true,
+  },
+  plugins: [ "prettier" ],
+  extends: [ "eslint:recommended", "prettier" ],
   rules: {
-    "max-len": 0,
-  }
-};
+    'prettier/prettier': [
+      'error',
+      {
+        printWidth: 90,
+        singleQuote: true,
+        arrowParens: 'always',
+        trailingComma: 'all',
+      },
+    ],
+  },
+}
