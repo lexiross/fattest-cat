@@ -1,7 +1,6 @@
 const request = require('request-promise');
 
-const LIST_URL =
-  'https://www.sfspca.org/wp-json/sfspca/v1/filtered-posts/get-adoptions?per_page=100';
+const LIST_URL = 'https://www.sfspca.org/wp-json/sfspca/v1/adoption?per_page=100';
 
 exports.fetchCatItems = async function fetchCatItems() {
   const responseText = await request.get(LIST_URL);
